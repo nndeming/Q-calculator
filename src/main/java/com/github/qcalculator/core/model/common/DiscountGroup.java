@@ -33,33 +33,34 @@ import java.util.Map;
 @Data
 public class DiscountGroup implements Serializable {
 
-    private  String relation;
-    private  List<Item> items;
+    private String relation; // 枚举值, 详细可参考GroupRelation
+    private List<Item> items;
 
     /**
      * 根据用户可用的优惠，对组内信息进行过滤
      * @param inMap
      * @return
      */
-    public List<Item> filterItems(Map<String, Map<String,DiscountWrapper>> inMap){
+    public List<Item> filterItems(Map<String, Map<String, DiscountWrapper>> inMap) {
         //inMap 外层key为type，内层key为id，value为DiscountWrapper
-        if(CollectionUtils.isEmpty(items)|| MapUtils.isEmpty(inMap)){
+        if (CollectionUtils.isEmpty(items) || MapUtils.isEmpty(inMap)) {
             return null;
         }
         //构建items副本
         List<Item> itemsCopy = Lists.newArrayList(items);
         Iterator<Item> it = itemsCopy.iterator();
-        while(it.hasNext()){
+        while (it.hasNext()) {
+            // 遍历items, 仅留下和inMap的交集
             Item item = it.next();
-            if(!inMap.containsKey(item.getType())){
+            if (!inMap.containsKey(item.getType())) {
                 it.remove();
                 continue;
             }
-            if(StringUtils.isNotBlank(item.getId())){
+            if (StringUtils.isNotBlank(item.getId())) {
                 //理论上m不可能为空
-                Map<String,DiscountWrapper> m = inMap.get(item.getType());
-                if(MapUtils.isNotEmpty(m)){
-                      if(!m.containsKey(item.getId())){
+                Map<String, DiscountWrapper> m = inMap.get(item.getType());
+                if (MapUtils.isNotEmpty(m)) {
+                      if (!m.containsKey(item.getId())) {
                           it.remove();
                       }
                 }

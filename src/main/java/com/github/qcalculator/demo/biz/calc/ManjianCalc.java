@@ -17,12 +17,12 @@ public class ManjianCalc extends AbstractCalculator<GoodsItem> {
     @Override
     public long calc(DiscountContext<GoodsItem> context, DiscountWrapper discountWrapper, Map<Long, GoodsItem> records, long prevStagePrice, CalcStage curStage) {
         List<GoodsItem> items = Lists.newArrayList(context.getDiscountItemGroup().get(discountWrapper.getId()));
-        if(prevStagePrice>=100*100) {
+        if (prevStagePrice >= 100 * 100) {
             prevStagePrice = prevStagePrice - 20 * 100;
         }
         //均摊
-        for(GoodsItem item:items){
-            item.getExtra().put(Constant.UPDATEABLEPRICE,(long)item.getExtra().get(Constant.UPDATEABLEPRICE)-(long)(20*100/items.size()));
+        for (GoodsItem item : items) {
+            item.getExtra().put(Constant.UPDATEABLEPRICE, (long) item.getExtra().get(Constant.UPDATEABLEPRICE) - (long) (20 * 100 / items.size()));
         }
         return prevStagePrice;
     }

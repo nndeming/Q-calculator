@@ -28,7 +28,7 @@ import java.util.Map;
  * @date: 2022/7
  */
 @Data
-public class GoodsInfo implements Serializable,Cloneable {
+public class GoodsInfo implements Serializable, Cloneable {
 
     /**
      * 商品ID
@@ -63,10 +63,10 @@ public class GoodsInfo implements Serializable,Cloneable {
     /**
      * 商品扩展属性
      */
-    private Map<String,Object> goodsExtra = Maps.newHashMap();
+    private Map<String, Object> goodsExtra = Maps.newHashMap();
 
 
-    public static GoodsInfo of(Long goodsId,Long skuId,List<Long> categoryIds,int num,long salePrice,String name,Map<String,Object> goodsExtra){
+    public static GoodsInfo of(Long goodsId, Long skuId, List<Long> categoryIds, int num, long salePrice, String name, Map<String, Object> goodsExtra) {
         GoodsInfo goodsInfo = new GoodsInfo();
         goodsInfo.setGoodsId(goodsId);
         goodsInfo.setCategoryIds(categoryIds);
@@ -80,6 +80,6 @@ public class GoodsInfo implements Serializable,Cloneable {
 
     @Override
     public GoodsInfo clone() throws CloneNotSupportedException {
-        return (GoodsInfo)super.clone();
+        return (GoodsInfo) super.clone();
     }
 }

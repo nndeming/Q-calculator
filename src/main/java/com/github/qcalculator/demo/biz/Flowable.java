@@ -27,7 +27,7 @@ public class Flowable extends Permutation<GoodsItem> {
 
     @Override
     protected void resetItems(GoodsItem item) {
-        item.getExtra().put(Constant.UPDATEABLEPRICE,item.getSalePrice());
+        item.getExtra().put(Constant.UPDATEABLEPRICE, item.getSalePrice());
     }
 
     @Override

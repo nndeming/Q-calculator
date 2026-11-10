@@ -18,8 +18,8 @@ public class PreGroupBy implements PreCompute<GoodsItem> {
 
     @Override
     public void preComputeItems(List<GoodsItem> items, DiscountWrapper discount, Map<String, Object> preCompute) {
-        preCompute.put("GroupBySkuIdPreCompute",items.stream().collect(Collectors.groupingBy
-                (GoodsInfo::getSkuId,Collectors.collectingAndThen(Collectors.toList(),
-                        e->e.stream().sorted().collect(Collectors.toList())))));
+        preCompute.put("GroupBySkuIdPreCompute", items.stream().collect(Collectors.groupingBy
+                (GoodsInfo::getSkuId, Collectors.collectingAndThen(Collectors.toList(),
+                        e -> e.stream().sorted().collect(Collectors.toList())))));
     }
 }

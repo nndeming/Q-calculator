@@ -31,7 +31,7 @@ import java.util.Set;
  */
 @SuppressWarnings("all")
 public class PreComputeHolder {
-    public static Set<PreCompute> COMPUTES= Sets.newHashSet();
+    public static Set<PreCompute> COMPUTES = Sets.newHashSet();
     private final static String PATH = "precompute.path";
 
     static{
@@ -41,10 +41,10 @@ public class PreComputeHolder {
         } catch (Exception ignore) {
         }
         String path = properties.getProperty(PATH);
-        if(StringUtils.isNotBlank(path)){
+        if (StringUtils.isNotBlank(path)) {
             Reflections reflections = new Reflections(path);
-            Set<Class<? extends PreCompute>> subTypes = reflections.getSubTypesOf(PreCompute.class);
-            for(Class<? extends PreCompute> clazz:subTypes){
+            Set<Class< ? extends PreCompute>> subTypes = reflections.getSubTypesOf(PreCompute.class);
+            for (Class< ? extends PreCompute> clazz : subTypes) {
                 try {
                     COMPUTES.add(clazz.newInstance());
                 } catch (Exception ignore) {

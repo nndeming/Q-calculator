@@ -32,7 +32,7 @@ import java.util.function.Consumer;
  * @date: 2022/7
  */
 @Data
-public class GoodsItem extends GoodsInfo implements Serializable, Comparable<GoodsItem>,Cloneable {
+public class GoodsItem extends GoodsInfo implements Serializable, Comparable<GoodsItem>, Cloneable {
 
     /**
      * 根据基本信息构造具体的计算商品，复制属性，以及单商品唯一id
@@ -56,7 +56,7 @@ public class GoodsItem extends GoodsInfo implements Serializable, Comparable<Goo
     /**
      * 商品扩展属性
      */
-    private Map<String,Object> extra = Maps.newHashMap();
+    private Map<String, Object> extra = Maps.newHashMap();
 
     /**
      * 根据商品信息（数量），生成计算时候需要的具体商品（单个）
@@ -71,7 +71,7 @@ public class GoodsItem extends GoodsInfo implements Serializable, Comparable<Goo
         }
         List<T> goodsItems = Lists.newArrayList();
         for (int i = 0; i < goodsInfo.getNum(); i++) {
-            T item = (T)new GoodsItem(idGenerator.nextId(),goodsInfo);
+            T item = (T) new GoodsItem(idGenerator.nextId(), goodsInfo);
             consumer.accept(item);
             goodsItems.add(item);
         }
@@ -87,7 +87,7 @@ public class GoodsItem extends GoodsInfo implements Serializable, Comparable<Goo
             return false;
         }
         GoodsItem goodsItem = (GoodsItem) o;
-        return Objects.equals(calculateId,goodsItem.calculateId);
+        return Objects.equals(calculateId, goodsItem.calculateId);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class GoodsItem extends GoodsInfo implements Serializable, Comparable<Goo
 
     @Override
     public GoodsItem clone() throws CloneNotSupportedException {
-        return (GoodsItem)super.clone();
+        return (GoodsItem) super.clone();
     }
 
 }

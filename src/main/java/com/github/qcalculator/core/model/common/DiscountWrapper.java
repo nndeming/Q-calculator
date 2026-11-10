@@ -25,7 +25,7 @@ import java.util.Objects;
  * @date: 2022/7
  */
 @Data
-public class DiscountWrapper implements Serializable,Comparable<DiscountWrapper> {
+public class DiscountWrapper implements Serializable, Comparable<DiscountWrapper> {
 
     /**
      * 优惠的具体类型，CalculatorRouter会根据这个type在Calculator的实现类中扫描
@@ -53,7 +53,7 @@ public class DiscountWrapper implements Serializable,Comparable<DiscountWrapper>
     private DiscountConfig discountConfig;
 
 
-    public static DiscountWrapper of(String type,String id,String name,boolean mustUse,DiscountConfig discountConfig){
+    public static DiscountWrapper of(String type, String id, String name, boolean mustUse, DiscountConfig discountConfig) {
         DiscountWrapper wrapper = new DiscountWrapper();
         wrapper.setType(type);
         wrapper.setId(id);
@@ -78,7 +78,7 @@ public class DiscountWrapper implements Serializable,Comparable<DiscountWrapper>
 
     @Override
     public int compareTo(DiscountWrapper o) {
-        return (this.type+this.id).compareTo(o.getType()+o.getId());
+        return (this.type + this.id).compareTo(o.getType() + o.getId());
     }
 
 }

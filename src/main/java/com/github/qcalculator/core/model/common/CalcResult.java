@@ -40,7 +40,7 @@ public class CalcResult implements Serializable {
     /**
      * 最优优惠计算过程
      */
-    private  CalcStage[] stages;
+    private CalcStage[] stages;
 
     /**
      * 当前序列计算的实付金额
@@ -52,18 +52,18 @@ public class CalcResult implements Serializable {
      * 当前序列优惠计算过程
      */
     @JsonIgnore
-    private transient  CalcStage[] curStages;
+    private transient CalcStage[] curStages;
 
     /**
      *  实时计算价格
      */
     @JsonIgnore
-    private transient  long curPrice;
+    private transient long curPrice;
 
-    public static CalcResult create(int n){
-        CalcResult c=new CalcResult();
-        c.stages=new CalcStage[n];
-        c.curStages=new CalcStage[n];
+    public static CalcResult create(int n) {
+        CalcResult c = new CalcResult();
+        c.stages = new CalcStage[n];
+        c.curStages = new CalcStage[n];
         return c;
     }
 

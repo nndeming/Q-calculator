@@ -31,20 +31,20 @@ import java.util.Map;
  */
 public abstract class AbstractCalculator<T extends GoodsItem> implements Calculator<T> {
 
-    public  long calcWrap(DiscountContext<T> context, DiscountWrapper discountWrapper, Map<Long, T> records, byte idx, int i) {
+    public long calcWrap(DiscountContext<T> context, DiscountWrapper discountWrapper, Map<Long, T> records, byte idx, int i) {
         CalcStage stage = new CalcStage();
         CalcResult cr = context.getCalcResult();
-        long price= cr.getCurPrice();
+        long price = cr.getCurPrice();
         stage.setBeforeCalcPrice(price);
-        price = calc(context, discountWrapper,records, price, stage);
-        if(price<0){
+        price = calc(context, discountWrapper, records, price, stage);
+        if (price<0) {
             return price;
         }
         stage.setAfterCalcPrice(price);
         stage.setIndex(idx);
         stage.setStageType(discountWrapper.getType());
         cr.setCurPrice(price);
-        if(stage.getBeforeCalcPrice()>stage.getAfterCalcPrice()) {
+        if (stage.getBeforeCalcPrice()>stage.getAfterCalcPrice()) {
             cr.getCurStages()[i] = stage;
         }
         return price;
@@ -59,6 +59,6 @@ public abstract class AbstractCalculator<T extends GoodsItem> implements Calcula
      * @param curStage 当前stage
      * @return
      */
-    public abstract  long calc(DiscountContext<T> context, DiscountWrapper discountWrapper, Map<Long,T> records, long prevStagePrice, CalcStage curStage);
+    public abstract long calc(DiscountContext<T> context, DiscountWrapper discountWrapper, Map<Long, T> records, long prevStagePrice, CalcStage curStage);
 
 }

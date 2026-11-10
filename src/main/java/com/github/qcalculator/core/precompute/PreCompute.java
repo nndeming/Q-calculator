@@ -41,5 +41,5 @@ public interface PreCompute<T extends GoodsItem> {
      * @param discount 当前优惠
      * @param preCompute 存储计算的结果
      */
-     void preComputeItems(List<T> items, DiscountWrapper discount, Map<String,Object> preCompute);
+     void preComputeItems(List<T> items, DiscountWrapper discount, Map<String, Object> preCompute);
 }

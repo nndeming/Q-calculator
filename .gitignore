@@ -1,0 +1,11 @@
+# Build output
+target/
+*.class
+*.jar
+
+# IDE
+.idea/
+*.iml
+.classpath
+.project
+.settings/

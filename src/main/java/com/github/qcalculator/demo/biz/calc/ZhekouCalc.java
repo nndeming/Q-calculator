@@ -20,21 +20,21 @@ public class ZhekouCalc extends AbstractCalculator<GoodsItem> {
     @Override
     public long calc(DiscountContext<GoodsItem> context, DiscountWrapper discountWrapper, Map<Long, GoodsItem> records, long prevStagePrice, CalcStage curStage) {
         List<GoodsItem> items = Lists.newArrayList(context.getDiscountItemGroup().get(discountWrapper.getId()));
-        Map<Long, List<GoodsItem>> map = (Map<Long, List<GoodsItem>>)context.getPreCompute().get("GroupBySkuIdPreCompute");
+        Map<Long, List<GoodsItem>> map = (Map<Long, List<GoodsItem>>) context.getPreCompute().get("GroupBySkuIdPreCompute");
             long maxPrice = 0L;
             Collection<GoodsItem> group = CollectionUtils.EMPTY_COLLECTION;
-            for(Collection<GoodsItem> c:map.values()){
-                long tmp = (long)c.iterator().next().getExtra().get(Constant.UPDATEABLEPRICE);
-                if(tmp>maxPrice){
-                    maxPrice=tmp;
+            for (Collection<GoodsItem> c : map.values()) {
+                long tmp = (long) c.iterator().next().getExtra().get(Constant.UPDATEABLEPRICE);
+                if (tmp > maxPrice) {
+                    maxPrice = tmp;
                     group = c;
                 }
             }
-          long discount = (long)(maxPrice*group.size()*0.2);
+          long discount = (long) (maxPrice * group.size() * 0.2);
             //均摊
           for (GoodsItem item : group) {
                item.getExtra().put(Constant.UPDATEABLEPRICE, (long) item.getExtra().get(Constant.UPDATEABLEPRICE) - discount / items.size());
           }
-            return prevStagePrice-discount;
+            return prevStagePrice - discount;
     }
 }

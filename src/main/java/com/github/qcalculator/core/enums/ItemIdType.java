@@ -1,11 +1,11 @@
 package com.github.qcalculator.core.enums;
 
 public enum ItemIdType {
-    ITEM(0,"商品ID"),
-    SKU(1,"SKUID"),
-    CATEGORY(2,"类目Id");
+    ITEM(0, "商品ID"),
+    SKU(1, "SKUID"),
+    CATEGORY(2, "类目Id");
 
-    private  int code;
+    private int code;
     private String desc;
 
     ItemIdType(int code, String desc) {

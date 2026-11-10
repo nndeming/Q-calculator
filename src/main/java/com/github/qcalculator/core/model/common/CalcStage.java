@@ -51,6 +51,6 @@ public class CalcStage implements Serializable {
     /**
      * 扩展属性
      */
-    private Map<String,Object> extra;
+    private Map<String, Object> extra;
 
 }

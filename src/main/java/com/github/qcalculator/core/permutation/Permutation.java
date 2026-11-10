@@ -63,15 +63,15 @@ public abstract class Permutation<T extends GoodsItem> {
      * @param calculatorRouter 路由器
      * @return
      */
-    public Permutation<T> build(CalculatorRouter calculatorRouter){
-        this.calculatorRouter=calculatorRouter;
+    public Permutation<T> build(CalculatorRouter calculatorRouter) {
+        this.calculatorRouter = calculatorRouter;
         return this;
     }
 
     /**
      *  1-SUPPORTEDSIZE 之间所有排列组合的记录
      */
-    private final static Map<Integer,Collection<List<Byte>>> PERMUTATIONS = Maps.newHashMap();
+    private final static Map<Integer, Collection<List<Byte>>> PERMUTATIONS = Maps.newHashMap();
 
     /**
      * 最大支持的共享组长度
@@ -80,9 +80,9 @@ public abstract class Permutation<T extends GoodsItem> {
 
     static{
         //前置计算 1-SUPPORTEDSIZE 之间所有排列组合
-        for(byte i=1;i<=SUPPORTEDSIZE;i++){
-            PERMUTATIONS.put((int)i,Collections2.permutations(IntStream.range(0,i).boxed()
-                    .map(x->(byte)x.intValue()).collect(Collectors.toList())));
+        for (byte i = 1; i <= SUPPORTEDSIZE; i++) {
+            PERMUTATIONS.put((int) i, Collections2.permutations(IntStream.range(0, i).boxed()
+                    .map(x -> (byte) x.intValue()).collect(Collectors.toList())));
         }
     }
 
@@ -92,15 +92,15 @@ public abstract class Permutation<T extends GoodsItem> {
      * @param context 上下文
      * @return
      */
-    public void perm(DiscountContext<T> context){
-        int size=context.getDiscountWrappers().size();
+    public void perm(DiscountContext<T> context) {
+        int size = context.getDiscountWrappers().size();
         this.context = context;
         loadMustUseDiscount();
-        if(size==0){
-            return ;
+        if (size == 0) {
+            return;
         }
         Collection<List<Byte>> list = PERMUTATIONS.get(size);
-        for(List<Byte> a:list) {
+        for (List<Byte> a : list) {
             boolean isBetter = executeCalc(this.context, a);
             if (isBetter) {
                 //若出现比当前结果更优的结果则替换
@@ -111,10 +111,10 @@ public abstract class Permutation<T extends GoodsItem> {
         mustUseSet.clear();
     }
 
-    private void loadMustUseDiscount(){
-        for(int i=0;i<context.getDiscountWrappers().size();i++){
-            if(context.getDiscountWrappers().get(i).isMustUse()){
-                this.mustUseSet.add((byte)i);
+    private void loadMustUseDiscount() {
+        for (int i = 0; i < context.getDiscountWrappers().size(); i++) {
+            if (context.getDiscountWrappers().get(i).isMustUse()) {
+                this.mustUseSet.add((byte) i);
             }
         }
     }
@@ -122,44 +122,44 @@ public abstract class Permutation<T extends GoodsItem> {
     /**
      * 根据byte数组生成唯一数字作为Map的key，避免字符串拼接等低效操作
      */
-    private static Integer calcKey(List<Byte> a){
-        return  a.size()>=3?(a.get(0) << 6)+ (a.get(1) << 3) + a.get(2):0;
+    private static Integer calcKey(List<Byte> a) {
+        return a.size() >= 3 ? (a.get(0) << 6) + (a.get(1) << 3) + a.get(2) : 0;
     }
 
     /**
      * 若出现比当前结果更优的结果则替换
      * @param result 当前的计算结果
      */
-    private void updateRecord(CalcResult result){
+    private void updateRecord(CalcResult result) {
         result.setFinalPrice(result.getCurFinalPrice());
-        System.arraycopy(result.getCurStages(),0,result.getStages(),0,result.getStages().length);
+        System.arraycopy(result.getCurStages(), 0, result.getStages(), 0, result.getStages().length);
     }
 
-    private void cacheSnapshot(List<Byte> a,int i,Integer k){
-        if(enableOptimize(a)&&i==2&&!cache.containsKey(k)){
-            cache.put(k,makeSnapshot());
+    private void cacheSnapshot(List<Byte> a, int i, Integer k) {
+        if (enableOptimize(a) && i == 2 && !cache.containsKey(k)) {
+            cache.put(k, makeSnapshot());
         }
     }
 
-    private void initInner(boolean canOptimize,Integer k){
-        if(canOptimize){
+    private void initInner(boolean canOptimize, Integer k) {
+        if (canOptimize) {
             //若可优化则还原之前的保存点
             backToSnapshot(k);
-        }else{
+        } else {
             //若不可优化则老老实实初始化
             initCtx();
         }
     }
 
-    private boolean calcInner(Calculator<T> calculator,DiscountWrapper wrapper,List<Byte> a,int i){
+    private boolean calcInner(Calculator<T> calculator, DiscountWrapper wrapper, List<Byte> a, int i) {
         long price = calculator.calcWrap(context, wrapper, context.getRecords(), a.get(i), i);
         if (price < 0) {
             return false;
         }
-        if(i<a.size()-1) {
+        if (i < a.size() - 1) {
             int order = wrapper.getDiscountConfig().getCalculateGroup();
-            int nextOrder = context.getDiscountWrappers().get(a.get(i+1)).getDiscountConfig().getCalculateGroup();
-            if(order>nextOrder){
+            int nextOrder = context.getDiscountWrappers().get(a.get(i + 1)).getDiscountConfig().getCalculateGroup();
+            if (order > nextOrder) {
                 //优先级不符合则跳出
                 return false;
             }
@@ -170,33 +170,33 @@ public abstract class Permutation<T extends GoodsItem> {
     /**
      * 根据数组顺序执行计算器
      */
-    public boolean executeCalc(DiscountContext<T> context,List<Byte> a){
+    public boolean executeCalc(DiscountContext<T> context, List<Byte> a) {
         Integer k = calcKey(a);
-        boolean canOptimize = enableOptimize(a)&&cache.containsKey(k);
-        initInner(canOptimize,k);
-        for(int i=canOptimize?3:0;i<a.size();i++){
+        boolean canOptimize = enableOptimize(a) && cache.containsKey(k);
+        initInner(canOptimize, k);
+        for (int i = canOptimize ? 3 : 0; i < a.size(); i++) {
             DiscountWrapper wrapper = context.getDiscountWrappers().get(a.get(i));
             Calculator<T> calculator = (Calculator<T>) calculatorRouter.getService(wrapper.getType());
             //路由目标的计算器实现
-            if(canOptimize&&checkIfWakeUpJump(context.getDiscountWrappers().get(a.get(2)),wrapper)){
+            if (canOptimize && checkIfWakeUpJump(context.getDiscountWrappers().get(a.get(2)), wrapper)) {
                 //还原保存点后，比较保存点的最后一个优惠节点和当前优惠的优先级，如不符合则跳出
                 break;
             }
-            if(Objects.nonNull(calculator)){
+            if (Objects.nonNull(calculator)) {
                 //执行计算器
-                if(!calcInner(calculator,wrapper,a,i)){
+                if (!calcInner(calculator, wrapper, a, i)) {
                     return false;
                 }
                 //优惠长度为5、6、7 将开启优化，只缓存走到第3个节点的部分
-                cacheSnapshot(a,i,k);
+                cacheSnapshot(a, i, k);
             }
         }
         long curPrice = context.getCalcResult().getCurPrice();
         context.getCalcResult().setCurFinalPrice(curPrice);
         CalcStage[] stages = context.getCalcResult().getCurStages();
-        return curPrice<context.getCalcResult().getFinalPrice()&&(CollectionUtils.isEmpty(this.mustUseSet) || isMustUse(stages, this.mustUseSet))||
+        return curPrice < context.getCalcResult().getFinalPrice() && (CollectionUtils.isEmpty(this.mustUseSet) || isMustUse(stages, this.mustUseSet)) ||
                 //相同最优解处理逻辑
-                curPrice==context.getCalcResult().getFinalPrice()&&(CollectionUtils.isEmpty(this.mustUseSet) || isMustUse(stages, this.mustUseSet))&&sameOptimumCondition(stages);
+                curPrice == context.getCalcResult().getFinalPrice() && (CollectionUtils.isEmpty(this.mustUseSet) || isMustUse(stages, this.mustUseSet)) && sameOptimumCondition(stages);
     }
 
     /**
@@ -204,7 +204,7 @@ public abstract class Permutation<T extends GoodsItem> {
      * @param cachedWrap 保存点的最后一个优惠节点
      * @param wrapper 当前优惠节点
      */
-    private boolean checkIfWakeUpJump(DiscountWrapper cachedWrap,DiscountWrapper wrapper){
+    private boolean checkIfWakeUpJump(DiscountWrapper cachedWrap, DiscountWrapper wrapper) {
         return cachedWrap.getDiscountConfig().getCalculateGroup()>wrapper.getDiscountConfig().getCalculateGroup();
     }
 
@@ -215,28 +215,28 @@ public abstract class Permutation<T extends GoodsItem> {
      * @param pos 必须使用的优惠索引
      * @return
      */
-    private boolean isMustUse(CalcStage[] stages,Set<Byte> pos){
-        int c=0;
-        for(CalcStage stage:stages){
-            if(Objects.isNull(stage)){
+    private boolean isMustUse(CalcStage[] stages, Set<Byte> pos) {
+        int c = 0;
+        for (CalcStage stage : stages) {
+            if (Objects.isNull(stage)) {
                 continue;
             }
-            if(pos.contains(stage.getIndex())){
+            if (pos.contains(stage.getIndex())) {
                 c++;
             }
         }
-        return c==pos.size();
+        return c == pos.size();
     }
 
 
     /**
      * 初始化上下文，清理上一排列留下的脏数据
      */
-    private void initCtx(){
+    private void initCtx() {
         context.getCalcResult().setCurPrice(context.getOriginalPrice());
-        CalcStage[] curArr =context.getCalcResult().getCurStages();
+        CalcStage[] curArr = context.getCalcResult().getCurStages();
         //每次排列计算前初始化curStages为null
-        Arrays.fill(curArr,null);
+        Arrays.fill(curArr, null);
         //每次排列计算前reset usedList 中的单品价格，并清空
         context.getGoodsItems().forEach(this::resetItems);
         //清空黑名单
@@ -248,12 +248,12 @@ public abstract class Permutation<T extends GoodsItem> {
     /**
      * 构建保存点
      */
-    private CalcState<T> makeSnapshot(){
+    private CalcState<T> makeSnapshot() {
         CalcState<T> state = new CalcState<>();
         state.setCurPrice(context.getCalcResult().getCurPrice());
         state.setCurStages(copyStage(context.getCalcResult().getCurStages()));
         state.setRecords(copyRecord(context.getRecords()));
-        makeSnapshot(state,context);
+        makeSnapshot(state, context);
         return state;
     }
 
@@ -262,12 +262,12 @@ public abstract class Permutation<T extends GoodsItem> {
      * 返回保存点
      * @param k 缓存的key
      */
-    private void backToSnapshot(Integer k){
-        CalcState<T> state=(CalcState<T>)cache.get(k);
+    private void backToSnapshot(Integer k) {
+        CalcState<T> state = (CalcState<T>) cache.get(k);
         context.getCalcResult().setCurPrice(state.getCurPrice());
         context.getCalcResult().setCurStages(copyStage(state.getCurStages()));
         context.setRecords(copyRecord(state.getRecords()));
-        backToSnapshot(state,context);
+        backToSnapshot(state, context);
     }
 
 
@@ -275,9 +275,9 @@ public abstract class Permutation<T extends GoodsItem> {
      * 复制stages
      * @param curStages 当前stages
      */
-    private CalcStage[] copyStage(CalcStage[] curStages){
-        CalcStage[] cs=new CalcStage[curStages.length];
-        System.arraycopy(curStages,0,cs,0,curStages.length);
+    private CalcStage[] copyStage(CalcStage[] curStages) {
+        CalcStage[] cs = new CalcStage[curStages.length];
+        System.arraycopy(curStages, 0, cs, 0, curStages.length);
         return cs;
     }
 
@@ -286,11 +286,11 @@ public abstract class Permutation<T extends GoodsItem> {
      * @param goods 商品列表
      * @return
      */
-    protected Map<Long,T> copyGoods(List<T> goods){
-        Map<Long,T> map=Maps.newHashMap();
-        for(T good:goods){
+    protected Map<Long, T> copyGoods(List<T> goods) {
+        Map<Long, T> map = Maps.newHashMap();
+        for (T good : goods) {
             try {
-                map.put(good.getCalculateId(),(T)good.clone());
+                map.put(good.getCalculateId(), (T) good.clone());
             } catch (Exception ignore) {
             }
         }
@@ -301,7 +301,7 @@ public abstract class Permutation<T extends GoodsItem> {
      * 复制享受过优惠的商品记录，只用到calculateId，因此不对对象进行clone
      * @param records 享受过优惠的商品记录
      */
-    private Map<Long,T> copyRecord(Map<Long,T> records){
+    private Map<Long, T> copyRecord(Map<Long, T> records) {
         return Maps.newHashMap(records);
     }
 
@@ -335,11 +335,11 @@ public abstract class Permutation<T extends GoodsItem> {
      * 业务将状态记录到保存点
      * @param state 保存点对象
      */
-    protected abstract void makeSnapshot(CalcState<T> state,DiscountContext<T> context);
+    protected abstract void makeSnapshot(CalcState<T> state, DiscountContext<T> context);
 
     /**
      * 业务返回保存点状态
      * @param state 保存点对象
      */
-    protected abstract void backToSnapshot(CalcState<T> state,DiscountContext<T> context);
+    protected abstract void backToSnapshot(CalcState<T> state, DiscountContext<T> context);
 }

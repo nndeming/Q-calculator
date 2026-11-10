@@ -46,10 +46,10 @@ public class CalcState<T extends GoodsItem> implements Serializable {
     /**
      * 截止到保存点的已计算商品列表
      */
-    private Map<Long,T> records;
+    private Map<Long, T> records;
 
     /**
      * 截止到保存点的扩展信息
      */
-    private Map<String,Object> extra;
+    private Map<String, Object> extra;
 }

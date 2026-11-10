@@ -51,6 +51,6 @@ public class DiscountConfig implements Serializable {
     /**
      * 活动信息扩展信息
      */
-    private Map<String,Object> extra;
+    private Map<String, Object> extra;
 
 }
